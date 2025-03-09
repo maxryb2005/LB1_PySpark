@@ -1,0 +1,14 @@
+import pandas as pd
+
+# Чтение исходного CSV файла
+df = pd.read_csv('C:\\Users\\ostap\\Downloads\\updated_data.csv')
+
+# Установка диапазонов и соответствующих категорий
+bins = [0, 30000, 50000, 200000, 1000000, float('inf')]  # 'inf' обозначает бесконечность
+categories = ['E', 'D', 'C', 'B', 'A']
+
+# Создание нового столбца с категориями доходов
+df['total_income_category'] = pd.cut(df['total_income'], bins=bins, labels=categories, right=False)
+
+# Сохранение результатов в новый CSV файл
+df.to_csv('output_data.csv', index=False)
