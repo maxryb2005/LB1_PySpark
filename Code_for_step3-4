@@ -1,0 +1,23 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Загрузка данных из CSV файла
+file_path = 'new_data.csv'  # Укажите путь к вашему CSV файлу
+data = pd.read_csv(file_path)
+
+# Преобразуем столбец debt в категориальный тип (0 - без долгов, 1 - с долгами)
+data['debt'] = data['debt'].astype(int)
+
+# Группируем данные по целям кредита и считаем среднее значение долга
+purpose_debt = data.groupby('purpose')['debt'].mean().reset_index()
+
+# Визуализация данных
+plt.figure(figsize=(12, 6))
+sns.barplot(x='debt', y='purpose', data=purpose_debt, palette='viridis')
+plt.title('Средняя доля должников по целям кредита')
+plt.xlabel('Доля должников')
+plt.ylabel('Цель кредита')
+plt.xlim(0, 1)  # Ограничиваем ось X от 0 до 1 для лучшей визуализации
+plt.grid(axis='x')
+plt.show()
