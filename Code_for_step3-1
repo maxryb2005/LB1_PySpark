@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Загрузка данных из CSV файла
+file_path = 'new_data.csv'  # Укажите путь к вашему CSV файлу
+data = pd.read_csv(file_path)
+
+# Преобразование столбца debt в категориальный тип (0 - без долгов, 1 - с долгами)
+data['debt'] = data['debt'].astype(int)
+
+# Группировка данных по количеству детей и подсчет доли должников
+children_debt = data.groupby('children')['debt'].mean().reset_index()
+
+# Переименование столбцов для удобства
+children_debt.columns = ['children', 'debt_ratio']
+
+# Визуализация данных
+plt.figure(figsize=(10, 6))
+sns.barplot(x='children', y='debt_ratio', data=children_debt, palette='viridis')
+plt.title('Зависимость между количеством детей и возвратом кредита в срок')
+plt.xlabel('Количество детей')
+plt.ylabel('Доля должников')
+plt.xticks(rotation=45)
+plt.grid(axis='y')
+plt.show()
