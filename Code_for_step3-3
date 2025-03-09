@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Загрузка данных из CSV файла
+file_path = 'new_data.csv'  # Укажите путь к вашему CSV файлу
+data = pd.read_csv(file_path)
+
+# Преобразуем столбец debt в категориальный тип (0 - без долгов, 1 - с долгами)
+data['debt'] = data['debt'].astype(int)
+
+# Создаем категории дохода (например, низкий, средний, высокий)
+bins = [0, 30000, 60000, 100000, float('inf')]  # Укажите границы для категорий
+labels = ['Низкий', 'Средний', 'Высокий', 'Очень высокий']
+data['income_category'] = pd.cut(data['total_income'], bins=bins, labels=labels)
+
+# Группируем данные по категориям дохода и считаем среднее значение долга
+income_debt = data.groupby('income_category')['debt'].mean().reset_index()
+
+# Визуализация данных
+plt.figure(figsize=(10, 6))
+sns.barplot(x='income_category', y='debt', data=income_debt, palette='viridis')
+plt.title('Средняя доля должников по категориям дохода')
+plt.xlabel('Категория дохода')
+plt.ylabel('Доля должников')
+plt.ylim(0, 1)  # Ограничиваем ось Y от 0 до 1 для лучшей визуализации
+plt.grid(axis='y')
+plt.show()
