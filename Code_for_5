@@ -1,0 +1,35 @@
+import pandas as pd
+
+# Загрузка исходного CSV файла
+df = pd.read_csv('C:\\Users\\ostap\\Downloads\\data.csv')
+
+# Создание первого датафрейма для education
+edu_unique = df['education'].unique()
+education_dict = dict(zip(edu_unique, range(len(edu_unique))))
+education_df = pd.DataFrame({
+    'education': edu_unique,
+    'education_id': list(range(len(edu_unique)))
+})
+
+# Создание второго датафрейма для family_status
+fam_unique = df['family_status'].unique()
+family_status_dict = dict(zip(fam_unique, range(len(fam_unique))))
+family_status_df = pd.DataFrame({
+    'family_status': fam_unique,
+    'family_status_id': list(range(len(fam_unique)))
+})
+
+# Замена education и family_status на education_id и family_status_id
+df['education_id'] = df['education'].map(education_dict)
+df['family_status_id'] = df['family_status'].map(family_status_dict)
+
+# Удаление старых столбцов education и family_status
+df.drop(['education', 'family_status'], axis=1, inplace=True)
+
+# Сохранение обновленного датафрейма в новый CSV файл
+df.to_csv('updated_data.csv', index=False)
+
+# Сохранение новых датафреймов в отдельные CSV файлы
+education_df.to_csv('education_dictionary.csv', index=False)
+family_status_df.to_csv('family_status_dictionary.csv', index=False)
+
