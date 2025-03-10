@@ -19,33 +19,24 @@ df['days_employed'] = df['days_employed'].fillna(median_value)
 missing_ratio = df['days_employed'].isnull().mean()
 print(f'Доля пропущенных значений в столбце days_employed: {missing_ratio:.2%}')
 
-# 4. Возможные причины появления пропусков
-# Пропуски могут появиться из-за ошибок ввода данных, сбоев оборудования или неполной информации от пользователей.
-
-# 5. Почему медианное значение лучше для заполнения пропусков?
-# Медиана меньше подвержена влиянию выбросов, чем среднее значение, и позволяет сохранить распределение данных ближе к исходному.
-
-# 6. Обработка аномальных значений
+# 4. Обработка аномальных значений
 df['days_employed'] = df['days_employed'].apply(lambda x: max(x, 0))  # Убираем отрицательные значения
 median_days_employed = df['days_employed'].median()
 df['days_employed'] = df['days_employed'].fillna(median_days_employed)
 
-# 7. Преобразование типа данных
+# 5. Преобразование типа данных
 # Перед преобразованием в int проверяем наличие NA и inf
 df['total_income'] = pd.to_numeric(df['total_income'], errors='coerce')  # Преобразуем в числовой тип, заменяя некорректные значения на NaN
 df['total_income'] = df['total_income'].fillna(0)  # Заменяем NaN на 0 (или другое подходящее значение)
 df['total_income'] = df['total_income'].replace([np.inf, -np.inf], 0)  # Заменяем бесконечности на 0
 
-# Теперь можем безопасно преобразовать в int
+# Преобразование в int
 df['total_income'] = df['total_income'].astype(int)
 
-# 8. Удаление дубликатов
+# 6. Удаление дубликатов
 # Явные дубликаты
 df.drop_duplicates(inplace=True)
 
 # Неявные дубликаты
 df['education'] = df['education'].str.lower().str.strip()  # Приведение всех значений к нижнему регистру и удаление пробелов
 df.drop_duplicates(subset=['education'], inplace=True)  # Удаление дубликатов по столбцу 'education'
-
-# Причины появления дубликатов
-# Дубликаты могут возникать из-за повторной записи одной и той же информации, ошибок при вводе данных или объединения данных из разных источников.
