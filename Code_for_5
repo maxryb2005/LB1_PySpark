@@ -32,4 +32,3 @@ df.to_csv('updated_data.csv', index=False)
 # Сохранение новых датафреймов в отдельные CSV файлы
 education_df.to_csv('education_dictionary.csv', index=False)
 family_status_df.to_csv('family_status_dictionary.csv', index=False)
-
